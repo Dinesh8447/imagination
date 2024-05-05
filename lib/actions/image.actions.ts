@@ -1,7 +1,7 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { connectToDatabase } from "../database/mongoose";
+import { ConnectToDatabase } from "../database/mongoose";
 import { handleError } from "../utils";
 import User from "../database/models/user.model";
 import Image from "../database/models/image.model";
@@ -18,7 +18,7 @@ const populateUser = (query: any) => query.populate({
 // ADD IMAGE
 export async function addImage({ image, userId, path }: AddImageParams) {
   try {
-    await connectToDatabase();
+    await ConnectToDatabase();
 
     const author = await User.findById(userId);
 
@@ -42,7 +42,7 @@ export async function addImage({ image, userId, path }: AddImageParams) {
 // UPDATE IMAGE
 export async function updateImage({ image, userId, path }: UpdateImageParams) {
   try {
-    await connectToDatabase();
+    await ConnectToDatabase();
 
     const imageToUpdate = await Image.findById(image._id);
 
@@ -67,7 +67,7 @@ export async function updateImage({ image, userId, path }: UpdateImageParams) {
 // DELETE IMAGE
 export async function deleteImage(imageId: string) {
   try {
-    await connectToDatabase();
+    await ConnectToDatabase();
 
     await Image.findByIdAndDelete(imageId);
   } catch (error) {
@@ -80,7 +80,7 @@ export async function deleteImage(imageId: string) {
 // GET IMAGE
 export async function getImageById(imageId: string) {
   try {
-    await connectToDatabase();
+    await ConnectToDatabase();
 
     const image = await populateUser(Image.findById(imageId));
 
@@ -99,7 +99,7 @@ export async function getAllImages({ limit = 9, page = 1, searchQuery = '' }: {
   searchQuery?: string;
 }) {
   try {
-    await connectToDatabase();
+    await ConnectToDatabase();
 
     cloudinary.config({
       cloud_name: process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME,
@@ -161,7 +161,7 @@ export async function getUserImages({
   userId: string;
 }) {
   try {
-    await connectToDatabase();
+    await ConnectToDatabase();
 
     const skipAmount = (Number(page) - 1) * limit;
 
